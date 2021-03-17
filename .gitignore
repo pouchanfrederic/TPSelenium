@@ -54,3 +54,5 @@ webDriver/build
 webDriver/.settings/org.eclipse.buildship.core.prefs
 webDriver/.project
 webDriver/.classpath
+
+.gradle
