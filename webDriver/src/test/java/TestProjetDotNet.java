@@ -6,6 +6,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
+import java.util.Random;
+
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.After;
@@ -87,8 +89,8 @@ public class TestProjetDotNet {
     // 17 | click | css=.btn | 
     // driver.findElement(By.cssSelector(".btn")).click();
 
-    WebElement form = driver.findElement(By.tagName("form"));
-    form.findElement(By.className("btn-primary")).click();
+
+    submitForm();
 
     System.out.println("Nombre de ligne avant l'ajout : " + nombreLigne );
     System.out.println("Nombre de ligne après l'ajout : " +  driver.findElements(By.tagName("tr")).size());
@@ -112,8 +114,9 @@ public class TestProjetDotNet {
 
         // 4 | click | linkText=Supprimer | 
         driver.findElement(By.linkText("Supprimer")).click();
+
         // 5 | click | css=.btn | 
-        driver.findElement(By.className("btn-danger")).click();
+        submitForm();
 
         System.out.println("Nombre de ligne avant la suppression : " + nombreLigne );
         System.out.println("Nombre de ligne après la suppression : " +  driver.findElements(By.tagName("tr")).size());
@@ -121,6 +124,72 @@ public class TestProjetDotNet {
         assertThat(driver.findElements(By.tagName("tr")).size(), equalTo(nombreLigne - 1));
 
     }
+
+
+    @Test
+    public void modifyARestaurant(){
+        // Test name: modifierUnRestaurant
+        // Step # | name | target | value
+        // 1 | open | / | 
+        driver.get("https://localhost:44377/");
+        // 2 | setWindowSize | 1219x736 | 
+        driver.manage().window().setSize(new Dimension(1219, 736));
+        // 3 | click | linkText=Gestion des Restaurants | 
+        driver.findElement(By.linkText("Gestion des Restaurants")).click();
+
+        var nomDuPremierRestaurant = driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(1)")).getText();
+
+        // 4 | click | linkText=Modifier | 
+        driver.findElement(By.linkText("Modifier")).click();
+        // 6 | type | id=nom | Le Restaurant est modifie
+        driver.findElement(By.id("nom")).clear();
+
+        Random random = new Random();
+
+        driver.findElement(By.id("nom")).sendKeys("Le Restaurant est modifié " + random.nextInt(200)); //Pour s'assurer que le nom avant et après soient toujours différents 
+        // 7 | click | css=.btn-success | 
+        driver.findElement(By.cssSelector(".btn-success")).click();
+
+        System.out.println("Avant la modification : " + nomDuPremierRestaurant);
+        System.out.println("Après la modification : " + driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(1)")).getText());
+
+        assertThat(driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(1)")).getText(), not(nomDuPremierRestaurant));
+    }
+
+    @Test
+    public void addAGrade(){
+        driver.get("https://localhost:44377/");
+        driver.manage().window().setSize(new Dimension(1219, 736));
+        driver.findElement(By.linkText("Gestion des Restaurants")).click();
+        driver.findElement(By.linkText("Noter vos Restaurants préférés")).click();
+
+        var dateDeLaNote = driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(2)")).getText();
+
+
+        driver.findElement(By.cssSelector("tr:nth-child(1) .btn")).click();
+        driver.findElement(By.id("note_derniere_visite_score")).clear();
+        driver.findElement(By.id("note_derniere_visite_score")).sendKeys("3");
+        driver.findElement(By.id("note_derniere_visite_commentaire")).clear();
+        driver.findElement(By.id("note_derniere_visite_commentaire")).sendKeys("super expérience !");
+        submitForm();
+        driver.findElement(By.linkText("Noter vos Restaurants préférés")).click(); //On retourne sur la page pour pouvoir comparer les notes
+
+        System.out.println("Avant la modification : " + dateDeLaNote);
+        System.out.println("Après la modification : " + driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(2)")).getText());
+
+        assertThat(driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(2)")).getText(), not(dateDeLaNote));
+
+    }
+
+    private void submitForm(){
+        
+        // WebElement form = driver.findElement(By.tagName("form"));
+        // form.findElement(By.className("btn-primary")).click();
+
+        driver.findElement(By.cssSelector("form input[type=submit]")).click();
+    }
+
+
 
 
 
