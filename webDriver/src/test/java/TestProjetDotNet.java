@@ -44,6 +44,7 @@ public class TestProjetDotNet {
         }
     }
 
+    // TODO : tests simples : présence des boutons dans la navbar ; texte du footer ; navigation sur la page détails * 2
 
     @Test
     public void verifyTitle(){

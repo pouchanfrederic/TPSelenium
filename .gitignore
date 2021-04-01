@@ -56,3 +56,4 @@ webDriver/.project
 webDriver/.classpath
 
 .gradle
+!chromedriver.exe
