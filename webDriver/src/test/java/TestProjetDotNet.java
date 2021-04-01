@@ -2,10 +2,14 @@ import org.junit.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
@@ -29,9 +33,13 @@ public class TestProjetDotNet {
     }
 
     @Before
-    public void setup() {
-        driver = new ChromeDriver();
-        
+    public void setup() throws MalformedURLException {
+        //driver = new ChromeDriver();
+
+        String Hub = "http://localhost:4444";
+        DesiredCapabilities caps = new DesiredCapabilities();
+        caps.setBrowserName("chrome");
+        driver = new RemoteWebDriver(new URL(Hub), caps);
         driver.get("https://localhost:44347/");
         // for Firefox
 	// driver = new FirefoxDriver();
@@ -69,7 +77,7 @@ public class TestProjetDotNet {
 
     int nombreLigne = driver.findElements(By.tagName("tr")).size();
     // 4 | click | linkText=Ajouter un nouveau restaurant | 
-    driver.findElement(By.linkText("Créer un restaurant")).click();
+    driver.findElement(By.linkText("Creer un restaurant")).click();
     // 5 | click | id=nom | 
     // 6 | type | id=nom | restaurant du bonheur
     driver.findElement(By.id("Nom")).sendKeys("restaurant du test1");
