@@ -33,9 +33,6 @@ public class TestProjetDotNet {
     public static void setupWebdriverChromeDriver() {
         System.setProperty("webdriver.chrome.driver",
                 System.getProperty("user.dir") + "/src/test/resources/chromedriver.exe");
-        // for Firefox
-        // System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") +
-        // "/src/test/resources/geckodriver");
     }
 
     @Before
@@ -44,12 +41,8 @@ public class TestProjetDotNet {
         // String Hub = "http://localhost:4444";
         // DesiredCapabilities caps = new DesiredCapabilities();
         // caps.setBrowserName("chrome");
-        // //caps.setBrowserName("firefox");
         // driver = new RemoteWebDriver(new URL(Hub), caps);
-
         driver = new ChromeDriver();
-        // for Firefox
-        // driver = new FirefoxDriver();
     }
 
     @After
@@ -97,8 +90,8 @@ public class TestProjetDotNet {
         createRestaurantPage.setDetails("dzjdzjdzjdz");
         createRestaurantPage.setNumeroAdresse("556");
         createRestaurantPage.setRueAdresse("rue des copains");
-        createRestaurantPage.setCodePostalAdresse("87667");
-        createRestaurantPage.setVilleAdresse("Fontaine");
+        createRestaurantPage.setCodePostalAdresse("38000");
+        createRestaurantPage.setVilleAdresse("Grenoble");
         submitForm();
 
         int nombreLignesApres = restaurantsListPage.getNumberOfRestaurants();
@@ -168,7 +161,7 @@ public class TestProjetDotNet {
     @Test
     public void addAGrade() {
         driver.get("https://localhost:44347/Restaurants/GradesList");
-        
+
         GradesListPage gradesListPage = new GradesListPage(driver);
         GradeRestaurantPage gradeRestaurantPage = new GradeRestaurantPage(driver);
 
