@@ -48,8 +48,6 @@ public class TestProjetDotNet {
         // driver = new RemoteWebDriver(new URL(Hub), caps);
 
         driver = new ChromeDriver();
-
-        driver.get("https://localhost:44347/");
         // for Firefox
         // driver = new FirefoxDriver();
     }
@@ -63,14 +61,17 @@ public class TestProjetDotNet {
 
     // TODO : tests simples : présence des boutons dans la navbar ; texte du footer
     // ; navigation sur la page détails * 2
+    // Avoir l'url dans une variable d'environnement ?
 
     @Test
     public void verifyTitle() {
+        driver.get("https://localhost:44347/");
         assertThat(driver.getTitle(), containsString("AppRestaurants.Web"));
     }
 
     @Test
     public void verifyTopFive() {
+        driver.get("https://localhost:44347/");
         // Todo : Trouver une autre condition qui ne dépend pas du fait d'avoir 5
         // restaurants en base
 
@@ -80,12 +81,10 @@ public class TestProjetDotNet {
 
     @Test
     public void verifyRestaurantCreation() {
+        driver.get("https://localhost:44347/Restaurants/Index");
 
-        HomePage homePage = new HomePage(driver);
         RestaurantsListPage restaurantsListPage = new RestaurantsListPage(driver);
         CreateRestaurantPage createRestaurantPage = new CreateRestaurantPage(driver);
-
-        homePage.goToRestaurantsListPage();
 
         int nombreLignesAvant = restaurantsListPage.getNumberOfRestaurants();
 
@@ -112,10 +111,9 @@ public class TestProjetDotNet {
 
     @Test
     public void deleteFirstRestaurant() {
-        HomePage homePage = new HomePage(driver);
-        RestaurantsListPage restaurantsListPage = new RestaurantsListPage(driver);
+        driver.get("https://localhost:44347/Restaurants/Index");
 
-        homePage.goToRestaurantsListPage();
+        RestaurantsListPage restaurantsListPage = new RestaurantsListPage(driver);
 
         int nombreLignesAvant = restaurantsListPage.getNumberOfRestaurants();
 
@@ -169,12 +167,10 @@ public class TestProjetDotNet {
 
     @Test
     public void addAGrade() {
+        driver.get("https://localhost:44347/Restaurants/GradesList");
         
-        HomePage homePage = new HomePage(driver);
         GradesListPage gradesListPage = new GradesListPage(driver);
         GradeRestaurantPage gradeRestaurantPage = new GradeRestaurantPage(driver);
-
-        homePage.goToGradesPage();
 
         LocalDate ancienneDate = gradesListPage.getDateOfFirstLine(); 
 
