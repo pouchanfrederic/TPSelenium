@@ -44,7 +44,61 @@ public class TestProjetDotNet {
         }
     }
 
-    // TODO : tests simples : présence des boutons dans la navbar ; texte du footer ; navigation sur la page détails * 2
+    // TODO : tests simples :  navigation sur la page détails * 2
+
+    @Test
+    public void verifyDetails2(){
+        // driver.get("https://localhost:44347/");
+
+        driver.manage().window().setSize(new Dimension(1219, 736));
+        driver.findElement(By.linkText("Gestion des restaurants")).click();
+        driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(5) > a.btn.btn-info")).click();
+        String contentWanted = driver.findElement(By.cssSelector("body > div > main > div:nth-child(2) > dl > dd:nth-child(2)")).getText();
+        
+        assertThat(contentWanted, equalTo("456123478"));  
+    }
+
+    @Test
+    public void verifyDetails1(){
+        // driver.get("https://localhost:44347/");
+
+        driver.manage().window().setSize(new Dimension(1219, 736));
+        driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(5) > a")).click();
+        String contentWanted = driver.findElement(By.cssSelector("body > div > main > div:nth-child(2) > dl > dd:nth-child(2)")).getText();
+        
+        assertThat(contentWanted, equalTo("123456789"));  
+    }
+
+    @Test
+    public void verifyNav(){
+        // driver.get("https://localhost:44347/");
+
+        driver.manage().window().setSize(new Dimension(1219, 736));
+        
+        String contentNav = driver.findElement(By.cssSelector("body > header > nav > div > div > ul")).getText();
+        String contentWanted = "Gestion des restaurants\nGestion des notes";
+        assertThat(contentNav, equalTo(contentWanted));  
+
+        driver.findElement(By.linkText("Gestion des restaurants")).click();
+        assertThat(driver.getTitle(), equalTo("Gestion des restaurants - AppRestaurants.Web"));    
+
+        driver.findElement(By.linkText("Gestion des notes")).click();
+        assertThat(driver.getTitle(), equalTo("Liste des notes - AppRestaurants.Web"));
+
+    }
+
+
+    @Test
+    public void verifyFooter(){
+        // driver.get("https://localhost:44347/");
+
+        driver.manage().window().setSize(new Dimension(1219, 736));
+        
+        String contentFooter = driver.findElement(By.cssSelector("body > footer > div")).getText();
+        String contentWanted = "© 2021 - AppRestaurants.Web - Privacy";
+
+        assertThat(contentFooter, equalTo(contentWanted));
+    }
 
     @Test
     public void verifyTitle(){
@@ -122,7 +176,6 @@ public class TestProjetDotNet {
         assertThat(driver.findElements(By.tagName("tr")).size(), equalTo(nombreLigne - 1));
 
     }
-
 
     // @Test
     // public void modifyARestaurant(){
