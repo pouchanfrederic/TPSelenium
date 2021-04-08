@@ -13,6 +13,7 @@ import pageobjects.RestaurantsListPage;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
+import static utils.Forms.submitForm;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,21 +56,19 @@ public class TestProjetDotNet {
 
     @Test
     public void verifyDetails2(){
-        // driver.get("https://localhost:44347/");
+        driver.get("https://localhost:44347/");
 
-        driver.manage().window().setSize(new Dimension(1219, 736));
         driver.findElement(By.linkText("Gestion des restaurants")).click();
-        driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(5) > a.btn.btn-info")).click();
-        String contentWanted = driver.findElement(By.cssSelector("body > div > main > div:nth-child(2) > dl > dd:nth-child(2)")).getText();
+        driver.findElement(By.linkText("Plus d'informations")).click();
+        String contentWanted = driver.findElement(By.cssSelector("main > div:nth-child(2) > dl > dt:nth-child(1)")).getText();
         
-        assertThat(contentWanted, equalTo("456123478"));  
+        assertThat(contentWanted, equalTo("Telephone"));
     }
 
     @Test
     public void verifyDetails1(){
-        // driver.get("https://localhost:44347/");
+        driver.get("https://localhost:44347/");
 
-        driver.manage().window().setSize(new Dimension(1219, 736));
         driver.findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(5) > a")).click();
         String contentWanted = driver.findElement(By.cssSelector("body > div > main > div:nth-child(2) > dl > dd:nth-child(2)")).getText();
         
@@ -78,33 +77,22 @@ public class TestProjetDotNet {
 
     @Test
     public void verifyNav(){
-        // driver.get("https://localhost:44347/");
+        driver.get("https://localhost:44347/");
 
-        driver.manage().window().setSize(new Dimension(1219, 736));
-        
         String contentNav = driver.findElement(By.cssSelector("body > header > nav > div > div > ul")).getText();
         String contentWanted = "Gestion des restaurants\nGestion des notes";
-        assertThat(contentNav, equalTo(contentWanted));  
-
-        driver.findElement(By.linkText("Gestion des restaurants")).click();
-        assertThat(driver.getTitle(), equalTo("Gestion des restaurants - AppRestaurants.Web"));    
-
-        driver.findElement(By.linkText("Gestion des notes")).click();
-        assertThat(driver.getTitle(), equalTo("Liste des notes - AppRestaurants.Web"));
-
+        assertThat(contentNav, equalTo(contentWanted));
     }
 
 
     @Test
     public void verifyFooter(){
-        // driver.get("https://localhost:44347/");
-
-        driver.manage().window().setSize(new Dimension(1219, 736));
+        driver.get("https://localhost:44347/");
         
         String contentFooter = driver.findElement(By.cssSelector("body > footer > div")).getText();
-        String contentWanted = "© 2021 - AppRestaurants.Web - Privacy";
+        String contentWanted = "2021 - AppRestaurants.Web - Privacy";
 
-        assertThat(contentFooter, equalTo(contentWanted));
+        assertThat(contentFooter, containsString(contentWanted));
     }
 
     @Test
@@ -143,7 +131,7 @@ public class TestProjetDotNet {
         createRestaurantPage.setRueAdresse("rue des copains");
         createRestaurantPage.setCodePostalAdresse("38000");
         createRestaurantPage.setVilleAdresse("Grenoble");
-        submitForm();
+        submitForm(driver);
 
         int nombreLignesApres = restaurantsListPage.getNumberOfRestaurants();
         System.out.println("Nombre de ligne avant l'ajout : " + nombreLignesAvant);
@@ -163,7 +151,7 @@ public class TestProjetDotNet {
         int nombreLignesAvant = restaurantsListPage.getNumberOfRestaurants();
 
         restaurantsListPage.deleteFirstRestaurant();
-        submitForm();
+        submitForm(driver);
 
         int nombreLignesApres = restaurantsListPage.getNumberOfRestaurants();
 
@@ -174,41 +162,7 @@ public class TestProjetDotNet {
 
     }
 
-    // @Test
-    // public void modifyARestaurant(){
-    // // Test name: modifierUnRestaurant
-    // // Step # | name | target | value
-    // // 1 | open | / |
-    // // 2 | setWindowSize | 1219x736 |
-    // driver.manage().window().setSize(new Dimension(1219, 736));
-    // // 3 | click | linkText=Gestion des Restaurants |
-    // driver.findElement(By.linkText("Gestion des Restaurants")).click();
 
-    // String nomDuPremierRestaurant = driver.findElement(By.cssSelector("body > div
-    // > main > table > tbody > tr:nth-child(1) > td:nth-child(1)")).getText();
-
-    // // 4 | click | linkText=Modifier |
-    // driver.findElement(By.linkText("Modifier")).click();
-    // // 6 | type | id=nom | Le Restaurant est modifie
-    // driver.findElement(By.id("nom")).clear();
-
-    // Random random = new Random();
-
-    // driver.findElement(By.id("nom")).sendKeys("Le Restaurant est modifié " +
-    // random.nextInt(200)); //Pour s'assurer que le nom avant et après soient
-    // toujours différents
-    // // 7 | click | css=.btn-success |
-    // driver.findElement(By.cssSelector(".btn-success")).click();
-
-    // System.out.println("Avant la modification : " + nomDuPremierRestaurant);
-    // System.out.println("Après la modification : " +
-    // driver.findElement(By.cssSelector("body > div > main > table > tbody >
-    // tr:nth-child(1) > td:nth-child(1)")).getText());
-
-    // assertThat(driver.findElement(By.cssSelector("body > div > main > table >
-    // tbody > tr:nth-child(1) > td:nth-child(1)")).getText(),
-    // not(nomDuPremierRestaurant));
-    // }
 
     @Test
     public void addAGrade() {
@@ -227,7 +181,7 @@ public class TestProjetDotNet {
 
         gradeRestaurantPage.setComment("c\'est nul");
 
-        submitForm();
+        submitForm(driver);
 
         LocalDate nouvelleDate = gradesListPage.getDateOfFirstLine();
 
@@ -237,11 +191,4 @@ public class TestProjetDotNet {
         assertThat(nouvelleDate, not(ancienneDate));
 
     }
-
-    /* Méthodes utilitaires non liées à une page en pariculier*/
-
-    private void submitForm() {
-        driver.findElement(By.cssSelector("form input[type=submit]")).click();
-    }
-
 }

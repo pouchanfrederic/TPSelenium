@@ -23,5 +23,11 @@ public class RestaurantsListPage {
         driver.findElement(By.linkText("Supprimer")).click();
     }
 
+    public String getFirstRestaurantName() {
+        return driver.findElement(By.cssSelector("tbody > tr:nth-child(1) > td:nth-child(1)")).getText();
+    }
 
+    public void goToModifyRestaurantPage() {
+        driver.findElement(By.linkText("Modifier")).click();
+    }
 }

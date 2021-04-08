@@ -16,6 +16,9 @@ public class GradesListPage {
     }
 
     public LocalDate getDateOfFirstLine() {
+        String test = driver
+                .findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(2)"))
+                .getText();
         return LocalDate.parse(driver
         .findElement(By.cssSelector("body > div > main > table > tbody > tr:nth-child(1) > td:nth-child(2)"))
         .getText(), dateFormatter);

@@ -9,6 +9,7 @@ import static org.hamcrest.MatcherAssert.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -17,6 +18,10 @@ import org.junit.After;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Keys;
+import pageobjects.ModifyRestaurantPage;
+import pageobjects.RestaurantsListPage;
+
+import static utils.Forms.submitForm;
 
 public class TestImplementation {
 
@@ -24,8 +29,8 @@ public class TestImplementation {
 
     @BeforeClass
     public static void setupWebdriverFirefoxDriver() {
-         System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") +
-         "/src/test/resources/geckodriver.exe");
+        System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") +
+                "/src/test/resources/geckodriver.exe");
 
     }
 
@@ -76,5 +81,26 @@ public class TestImplementation {
         driver.findElement(By.id("sampletodotext")).sendKeys(Keys.ENTER);
 
         assertThat(driver.findElement(By.name("li6")), notNullValue());
+    }
+
+    @Test
+    public void modifyARestaurant() {
+        driver.get("https://localhost:44347/Restaurants/Index");
+
+        RestaurantsListPage restaurantsListPage = new RestaurantsListPage(driver);
+        ModifyRestaurantPage modifyRestaurantPage = new ModifyRestaurantPage(driver);
+
+        String nomDuPremierRestaurant = restaurantsListPage.getFirstRestaurantName();
+
+        restaurantsListPage.goToModifyRestaurantPage();
+
+        modifyRestaurantPage.setName("Le Restaurant est modifié");
+
+        submitForm(driver);
+        String nouveauNom = restaurantsListPage.getFirstRestaurantName();
+        System.out.println("Avant la modification : " + nomDuPremierRestaurant);
+        System.out.println("Après la modification : " + nouveauNom);
+
+        assertThat(nouveauNom, not(nomDuPremierRestaurant));
     }
 }
